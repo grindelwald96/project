@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+  	footer{
+      background-color: #2f2f2f;
+      color: #fff;
+      padding-top: 65px;
+      padding-bottom: 65px;
+      margin-top: 10px;
+      margin-left: 0px;
+      line-height: 38px;
+    }
+   body {
+    font: 400 15px/1.8 Lato, sans-serif;
+    color: #777;
+}
+  </style>
+  <script type="text/javascript">
+    function hideForm() {
+     var x = document.forms["questions"]["type"].value;
+     if (x == "rat" || x=="txt") {
+        document.getElementById('hide').disabled='true';
+        document.getElementById('hide1').disabled='true';
+        document.getElementById('hide2').disabled='true';
+       }
+     else {
+      document.getElementById('hide').disabled='false';
+      document.getElementById('hide1').disabled='false';
+      document.getElementById('hide2').disabled='false';
+     }
+    }
+  </script>
+  <title>Questions</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ </head>
+ <body>
+ 	<div class="jumbotron text-center" style="background-image: url(images/desk.jpg); background-repeat: no-repeat; color: white; background-position: center;">
+ 		<h2><span class="glyphicon glyphicon-pencil"></span>  Post Your Question</h2>
+ 	</div>
+ 	<div class="container">
+ 	<form method="post" action="userquestion1.php" name="questions">
+    	<div class="form-group">
+      		<label for="category">Choose Category:</label>
+      		<select class="input-lg form-control" name="category">
+        		<option value="g">Gadgets</option>
+        		<option value="s">Social Issues</option>
+      		</select>
+    	</div>
+    	<div class="form-group">
+      		<label for="questions" class="sr-only">Post Your Question:</label>
+      		<input type="text" class="form-control input-lg" id="questions" placeholder="Post Your Question" name="question">
+    	</div>
+    	<div class="form-group">
+        <label for="type">Question Type:</label>
+        <select class="input-lg form-control" onchange="hideForm()" name="type">
+          <option value="mcq">Multiple Choice</option>
+          <option value="che">Checkbox</option>
+          <option value="rat">Rating</option>
+          <option value="txt">Text</option>
+        </select>
+      </div>
+        <div class="form-group">
+          <input type="text" class="form-control input-lg" id="hide" placeholder="Option 1" name="option1">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control input-lg" id="hide1" placeholder="Option 2" name="option2">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control input-lg" id="hide2" placeholder="Option 3" name="option3">
+      </div>
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+  </form>
+ 	</div>
+<footer>
+ <div class="container-fluid text-center">
+ 	<h3>CONTACT</h3>
+  		<div class="row">
+  			<div class="col-sm-4">
+  			<p>For further queries and suggestions,</p>
+  			<span class="glyphicon glyphicon-map-marker"></span> Eranakulam<br>
+        <span class="glyphicon glyphicon-envelope"></span> sreekanthps204@gmail.com<br>
+  			<span class="glyphicon glyphicon-phone-alt"></span> +91 703 483 3312
+  			</div>
+  		</div> 
+ </div>
+ </footer>
+ </body>
+ </html>
