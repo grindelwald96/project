@@ -59,6 +59,9 @@ cite{
 .gadget{
   border-left: 4px solid #0000ff;
 }
+h4{
+  color: red;
+}
   </style>
   </head>
   <body>
@@ -114,9 +117,9 @@ cite{
           $result1=mysqli_query($conn, $sql1);
           $row1=mysqli_fetch_assoc($result1);
           $value2=$row1["count2"];
-           $sql1="SELECT COUNT(*) as count3 FROM useranswer3 WHERE userid='$id';";
-          $result1=mysqli_query($conn, $sql1);
-          $row1=mysqli_fetch_assoc($result1);
+           $sql2="SELECT COUNT(*) as count3 FROM useranswer3 WHERE userid='$id';";
+          $result2=mysqli_query($conn, $sql2);
+          $row1=mysqli_fetch_assoc($result2);
           $value3=$row1["count3"];
           $value=$value1+$value2+$value3;
           echo"<p><em>Hai i, happens to be the first human here!</em></p><br>
@@ -127,6 +130,10 @@ cite{
         <div class="col-sm-7 text-center" >
           <?php
     $id=$_SESSION["id"];
+    if (!$val) {
+      echo "<div class='text-center'>
+      <h3>Hmm..you seem to be a noobie.<br> click on the pencil icon to post a question.</h3> </div>";
+    }
     $sql="SELECT * FROM userquestions WHERE userid='$id';";
     $result=mysqli_query($conn, $sql);
     while ($row=mysqli_fetch_assoc($result)) {
@@ -134,10 +141,18 @@ cite{
       if($row["category"]=="s"){
         echo "<blockquote class='social'><p><strong>$question</strong></p>
       <cite>in Social Issues</cite>";
+      if (!($row["visibility"])) {
+          echo "<br><h4>Question Removed by Admin</h4></blockquote>";
+          continue;
+        }
        }
       else{
       echo "<blockquote class='gadget'><p><strong>$question</strong></p>
         <cite>in Gadgets</cite>";
+        if (!($row["visibility"])) {
+         echo "<br><h4>Question Removed by Admin</h4></blockquote>";
+         continue;
+        }
       }
       switch ($row["questiontype"]) {
         case 'mcq':
