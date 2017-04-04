@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -69,9 +72,9 @@
     </div>
     <div class="collapse navbar-collapse" id="myNav">
       <ul class="nav navbar-nav" style="margin-left: 35px">
-      	<li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-      	<li class="active"><a href="#">Social <badge style="background-color: #1a1aff; color: #fff; padding-left: 6px; padding-right: 6px; border-radius: 6px"> 5</badge></a></li>
-      	<li><a href="#">Gadgets</a></li>
+      	<li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+      	<li><a href="adminsocial.php">Social</a></li>
+      	<li><a href="admingadgets.php">Gadgets</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li id=w>
@@ -87,27 +90,10 @@
    	<div class="container-fluid">
    		<div class="row">
    			<div class="col-sm-2 box">
-   				<img src="images/user.png" 
-   				class="img-circle" width=120px height=120px style="padding-top: 5px; margin-left: 30px;">
-   				<h3>Admin</h3>
-   				<p><em>Hai i, happens to be the first human here!</em></p><br>
-   				
+   				   				
    			</div>
    			<div class="col-sm-7 text-center">
-   				<h2>CONTENT</h2>
-   				<p>Some text blablblajbslfba.</p>
-          <button class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Allow</button>
-          <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Remove</button><br>
-          <hr>
-          <h2>CONTENT</h2>
-          <p>Some text blablblajbslfba.</p>
-          <button class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Allow</button>
-          <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Remove</button><br>
-          <hr>
-          <h2>CONTENT</h2>
-          <p>Some text blablblajbslfba.</p>
-          <button class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Allow</button>
-          <button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Remove</button><br>
+   				
    			</div>
    			<div class="col-sm-3 box" id="rate">
    				<h3>Trending Apps:</h3>

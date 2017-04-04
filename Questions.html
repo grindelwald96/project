@@ -16,21 +16,6 @@
     color: #777;
 }
   </style>
-  <script type="text/javascript">
-    function hideForm() {
-     var x = document.forms["questions"]["type"].value;
-     if (x == "rat" || x=="txt") {
-        document.getElementById('hide').disabled='true';
-        document.getElementById('hide1').disabled='true';
-        document.getElementById('hide2').disabled='true';
-       }
-     else {
-      document.getElementById('hide').disabled='false';
-      document.getElementById('hide1').disabled='false';
-      document.getElementById('hide2').disabled='false';
-     }
-    }
-  </script>
   <title>Questions</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,9 +42,13 @@
       		<label for="questions" class="sr-only">Post Your Question:</label>
       		<input type="text" class="form-control input-lg" id="questions" placeholder="Post Your Question" name="question">
     	</div>
+      <div class="form-group">
+          <label for="questions" class="sr-only">;</label>
+          <input type="text" class="form-control input-lg" id="tags" placeholder="Specify tags" name="tags">
+      </div>
     	<div class="form-group">
         <label for="type">Question Type:</label>
-        <select class="input-lg form-control" onchange="hideForm()" name="type">
+        <select class="input-lg form-control" name="type">
           <option value="mcq">Multiple Choice</option>
           <option value="che">Checkbox</option>
           <option value="rat">Rating</option>

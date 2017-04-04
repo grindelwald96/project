@@ -2,64 +2,48 @@
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Gadgets</title>
-    <meta charset="utf-8">
+<html>
+<head>
+	<title>Search results</title>
+	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapi s.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-    .box{
-      border-color: #000;
-      border-style: solid;
-      border-width: 1px;
-      box-shadow: 5px 5px 5px grey;
-      background-color: #e6e6e6;
-    }
-    #content{
-      border-style: none;
-      background-color: white;
-    }
+ <style>
+ .navbar {
+  margin-bottom: 2px;
+    font-family: Montserrat, sans-serif;
+    letter-spacing: 3px;
+    opacity: 0.8
+  }
+cite{
+  font-size: 13px;
+}
     footer{
       background-color: #2f2f2f;
       color: #fff;
       padding-top: 65px;
       padding-bottom: 65px;
-      margin-top: 10px;
+      margin-top: 30%;
       margin-left: 0px;
       line-height: 38px;
     }
-    .img-float {
-    z-index: 1;
-    position: fixed;
-    box-shadow: 5px 5px 5px grey;
-    opacity: 0.8;
+    body {
+     font: 400 15px/1.8 Lato, sans-serif;
+     color: #777;
     }
-     body {
-    font: 400 15px/1.8 Lato, sans-serif;
-    color: #777;
-}
-blockquote{
+    .social{
+  border-left: 4px solid red;
   box-shadow: 5px 5px 5px grey;
   border-radius: 4px;
 }
-.navbar {
-  margin-bottom: 2px;
-    font-family: Montserrat, sans-serif;
-    opacity: 0.8;
-    letter-spacing: 3px;
-}
-cite{
-  font-size: 13px;
-  font-weight: normal;
-}
-
-h1{
-  padding-left: 5em;
+.gadget{
+  border-left: 4px solid #0000ff;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 4px;
 }
 label{
   color: #e60000;
@@ -81,13 +65,11 @@ label{
     max-width: 50px;
     max-height: 50px;
       }
-.progress{
-  margin-top: 5px;
+ </style>
 }
-  </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+</head>
+<body>
+ <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-target="#myNav" data-toggle="collapse">
@@ -101,13 +83,13 @@ label{
       <ul class="nav navbar-nav" style="margin-left: 35px">
         <li><a href="user.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
         <li><a href="socialques.php">Social</a></li>
-        <li class="active"><a href="#">Gadgets</a></li>
+        <li><a href="gadgetques.php">Gadgets</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
       <li>
-          <form class="form form-inline" action ="tagsearch.php" method="post">
+          <form class="form form-inline" method="post">
       <input type="text" name="search" placeholder="  Search.." style="border-style: none;">
-      <button type="Submit" name="Submit" class="btn btn-default" style="border-style: none;"><span class="glyphicon glyphicon-search"></span></button>
+      <button type="submit" name="submit" class="btn btn-default" style="border-style: none;"><span class="glyphicon glyphicon-search"></span></button>
       </form>
         </li>
         <li>
@@ -119,49 +101,25 @@ label{
     </div>
   </div>
 </nav>
-    <div class="jumbotron" style="background-image: url(images/gadget.jpg); background-repeat: no-repeat; background-position: center; color: white; background-size: cover;">
-      <h1>Gadgets</h1>
-      </div>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-2 box">
-          <img src="images/user.png" 
-          class="img-circle" width=120px height=120px style="padding-top: 5px; margin-left: 30px;">
-                    <?php echo "<h3>".$_SESSION["name"]."</h3>"; 
-          $conn = mysqli_connect("localhost", "root", "", "miniproject");
+<div class="container" style="padding-top: 30px;">
+<?php
+$conn = mysqli_connect("localhost", "root", "", "miniproject");
  if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());}
-    
-          $id=$_SESSION["id"];
-          $sql="SELECT COUNT(*) as count FROM userquestions WHERE userid='$id';";
-          $result=mysqli_query($conn, $sql);
-          $row=mysqli_fetch_assoc($result);
-          $val=$row["count"];
-          $sql1="SELECT COUNT(*) as count1 FROM useranswer1 WHERE userid='$id';";
-          $result1=mysqli_query($conn, $sql1);
-          $row1=mysqli_fetch_assoc($result1);
-          $value1=$row1["count1"];
-           $sql1="SELECT COUNT(*) as count2 FROM useranswer2 WHERE userid='$id';";
-          $result1=mysqli_query($conn, $sql1);
-          $row1=mysqli_fetch_assoc($result1);
-          $value2=$row1["count2"];
-           $sql1="SELECT COUNT(*) as count3 FROM useranswer3 WHERE userid='$id';";
-          $result1=mysqli_query($conn, $sql1);
-          $row1=mysqli_fetch_assoc($result1);
-          $value3=$row1["count3"];
-          $value=$value1+$value2+$value3;
-          echo"<p><img class='img-circle' src='images/user1.png'>". $_SESSION["type"]."</p><br>
-          <p><strong>Stats:</strong></p><br>
-          <p>Polls Posted: $val</p>
-          <p>Polls Voted: $value</p><br>
-        </div>";?>
-        <div class="col-sm-7" >
-    <?php
-    $sql="SELECT * FROM userquestions WHERE category='g' AND visibility='1' ORDER BY questionid DESC;";
-    $result=mysqli_query($conn, $sql);
-    while ($row=mysqli_fetch_assoc($result)) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	$query=$_POST["search"];
+	$sql="SELECT * FROM userquestions WHERE tag LIKE '%$query%' AND visibility='1';";
+     $result=mysqli_query($conn, $sql);
+ echo"<h2> Showing results for '$query'</h2>
+  <div class='row'>
+  	<div class='col-sm-3'>
+  		
+  	</div>
+  	<div class='col-sm-7'>";
+  	 while ($row=mysqli_fetch_assoc($result)) {
       $question=$row["question"];
-        $qid=$row["questionid"];
+      $qid=$row["questionid"];
+      $_SESSION["qid"]=$qid;
       $uid=$row["userid"];
       $sql2="SELECT username FROM loginpage WHERE userid='$uid';";
       $result2=mysqli_query($conn, $sql2);
@@ -171,10 +129,19 @@ label{
       $result1=mysqli_query($conn, $sql1);
       $row1=mysqli_fetch_assoc($result1);
       $tag=$row1["tag"];
-      echo "<blockquote><p><h3>$question</h3><br><p><span class='glyphicon glyphicon-tags'></span> Tags: $tag</p><cite>Posted by $uname</cite></p>";
-      switch ($row["questiontype"]) {
+  		if($row["category"]=="s"){
+        echo "<blockquote class='social'><p><strong>$question</strong></p>
+        <p class='tag'><span class='glyphicon glyphicon-tags'></span> Tags: $tag</p>
+      <cite>Posted by $uname</cite>";
+       }
+      else{
+      echo "<blockquote class='gadget'><p><strong>$question</strong></p>
+      <p><span class='glyphicon glyphicon-tags'></span> Tags: $tag</p>
+        <cite>Posted by $uname</cite>";
+      }
+  	     switch ($row["questiontype"]) {
         case 'mcq':
-        $qid=$row["questionid"];
+         $qid=$row["questionid"];
         $sql1="SELECT optionid, optionvalue FROM optiontable WHERE questionid='$qid';";
         $result1=mysqli_query($conn, $sql1);
         $row1=mysqli_fetch_assoc($result1);
@@ -255,6 +222,8 @@ label{
         echo "<div class='result'><br>$res";
         echo"<br><img class='img-circle' src='images/user1.png'><cite>Posted by $un on $andate</cite></p></div>";
         }echo "<div>";
+        
+
           break;}
         
         case 'che':$qid=$row["questionid"];
@@ -287,12 +256,12 @@ label{
           </div>
          </div>
          <div class='checkbox'>
-        <label><input type='checkbox' value='$qid' name='flag'><span class='glyphicon glyphicon-flag'></span> Flag as inappropriate</label>
+        <label><input type='checkbox' value='$qid' name='flag'> <span class='glyphicon glyphicon-flag'></span> Flag as inappropriate</label>
         </div>
          <button class='btn btn-primary' type='Submit' name='Submit' value='$qid'> Submit</button>
          </form>
         </div>";
-        $sql4="SELECT countop1,countop2,countop3 FROM mcqresult WHERE questionid='$qid'";
+        $sql4="SELECT countop1,countop2,countop3 FROM mcqresult WHERE questionid='$qid';";
         $result4=mysqli_query($conn, $sql4);
         $row4=mysqli_fetch_assoc($result4);
        $res1=$row4["countop1"];
@@ -330,8 +299,8 @@ label{
         }
         else
          { echo"<div class='result'><h4>$count Voted</h4></div>";}
-        
-           $sql4="SELECT answer,userid,ansdate FROM useranswer1 WHERE questionid='$qid' ORDER BY answerid DESC;";
+
+            $sql4="SELECT answer,userid,ansdate FROM useranswer1 WHERE questionid='$qid' ORDER BY answerid DESC;";
         $result4=mysqli_query($conn, $sql4);
         $count=mysqli_num_rows($result4);
         echo"<div class='result'><h4>$count Comments</h4></div>";
@@ -352,11 +321,12 @@ label{
         echo"<br><img class='img-circle' src='images/user1.png'><cite>Posted by $un on $andate</cite></p></div>";
         }echo "<div>";
         
+
           break;}
         case 'txt':
            echo"<form class='form-inline' action='anspost.php' method='post'>
            <div class='form-group'>
-            <input type='text' class='form-control' placeholder=' Your Answer' name='ans'>
+            <input type='text' class='form-control' placeholder='Post Your Answer' name='ans'>
            </div>
            <div class='checkbox'>
         <label><input type='checkbox' value='$qid' name='flag'><span class='glyphicon glyphicon-flag'></span> Flag as inappropriate</label>
@@ -367,11 +337,11 @@ label{
            $sql4="SELECT answer,userid,ansdate FROM useranswer1 WHERE questionid='$qid' ORDER BY answerid DESC;";
         $result4=mysqli_query($conn, $sql4);
         $count=mysqli_num_rows($result4);
-        echo"<div class='result'><h4>$count Answered</h4></div>";
         if (!$count) {
           break;
         }
         else{
+          echo"<div class='result'><h4>$count Answered</h4></div>";
         echo "<div class='result-scroll'>";
         while($row4=mysqli_fetch_assoc($result4)){
        $res=$row4["answer"];
@@ -385,13 +355,13 @@ label{
         echo"<br><img class='img-circle' src='images/user1.png'><cite>Posted by $un on $andate</cite></p></div>";
         }echo "<div>";
            break;
-       }
+        }
         default: echo"<form class='form form-inline' action='anspost.php' method='post'>
           <div class='form-group'>
             <input type='number' class='form-control' placeholder='Rating' name='ans' min='1' max='5'>
           </div>
           <div class='checkbox'>
-        <label><input type='checkbox' value='$qid' name='flag'><span class='glyphicon glyphicon-flag'></span> Flag as inappropriate</label>
+        <label><input type='checkbox' value='$qid' name='flag'> <span class='glyphicon glyphicon-flag'></span> Flag as inappropriate</label>
         </div>
           <button class='btn btn-primary' type='Submit' name='Submit' value='$qid'> Submit</button>
            </form>";
@@ -409,46 +379,25 @@ label{
         $row4=mysqli_fetch_assoc($result4);
        $res=$row4["average"];
        echo"<div class='result'><br>Average = $res/5</p></div>";
-           break;
-       } echo"</blockquote><hr>";
-    }
-  ?>
-  </div>
-        <div class="col-sm-3 box" id="rate">
-          <h3>Trending Apps:</h3>
-          <img src="images/android.png" height="80px" width="80px"><br>
-          <p>Some text</p>
-          <p>Some text</p>
-          <p>Some text</p>
-          <p>Some text</p>
-          <h3>Cinemas:</h3>
-          <img src="images\movies.jpeg" height="80px" width="80px"><br>
-          <p>Some text</p>
-          <p>Some text</p>
-          <p>Some text</p>
-          <p>Some text</p>
-          <h3>Songs:</h3>
-          <img src="images\music.jpg" class="img-circle" height="80px" width="80px"><br>
-          <p>Some text</p>
-          <p>Some text</p>
-          <p>Some text</p>
-          <p>Some text</p>
-        </div>
-        <div class="img-float">
-         <a href="Questions.html"><img src="images\q.png" height="80px" width="80px"> </a>
-        </div>
-      </div>
+       }echo "</blockquote>";
+     }}
+       ?>
     </div>
-    <footer class="container-fluid text-center">
+  	<div class='col-sm-2'>
+  		
+  	</div>
+  </div>
+</div>
+  <footer class='container-fluid text-center'>
       <h3>CONTACT</h3>
-      <div class="row">
-        <div class="col-sm-4">
+      <div class='row'>
+        <div class='col-sm-4'>
         <p>For further queries and suggestions,</p>
-        <span class="glyphicon glyphicon-map-marker"></span> Eranakulam<br>
-        <span class="glyphicon glyphicon-envelope"></span> sreekanthps204@gmail.com<br> 
-        <span class="glyphicon glyphicon-phone-alt"></span> +91 703 483 3312
+        <span class='glyphicon glyphicon-map-marker'></span> Eranakulam<br>
+        <span class='glyphicon glyphicon-envelope'></span> sreekanthps204@gmail.com<br> 
+        <span class='glyphicon glyphicon-phone-alt'></span> +91 703 483 3312
         </div>
       </div> 
   </footer>
-  </body>
- </html>
+</body>
+</html>
