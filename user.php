@@ -9,7 +9,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapi s.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
@@ -52,15 +52,37 @@ session_start();
 }
 cite{
   font-size: 13px;
+  font-weight: normal;
 }
-.social{
+  .social{
   border-left: 4px solid red;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 4px;
 }
 .gadget{
   border-left: 4px solid #0000ff;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 4px;
 }
-h4{
-  color: red;
+.result{
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+}
+.result-scroll{
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  overflow-y: scroll;
+  height: 150px;
+}
+.img-circle{
+    max-width: 50px;
+    max-height: 50px;
+      }
+.progress{
+  margin-top: 5px;
 }
   </style>
   </head>
@@ -82,7 +104,13 @@ h4{
         <li><a href="gadgetques.php">Gadgets</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li id=w>
+        <li>
+          <form class="form form-inline" action ="tagsearch.php" method="post">
+      <input type="text" name="search" placeholder="  Search.." style="border-style: none;">
+      <button type="submit" name="submit" class="btn btn-default" style="border-style: none;"><span class="glyphicon glyphicon-search"></span></button>
+      </form>
+        </li>
+        <li>
           <a href="logout.php">
            <span class="glyphicon glyphicon-off"></span> Log Out
           </a>
@@ -122,35 +150,57 @@ h4{
           $row1=mysqli_fetch_assoc($result2);
           $value3=$row1["count3"];
           $value=$value1+$value2+$value3;
-          echo"<p><em>Hai i, happens to be the first human here!</em></p><br>
+          $sql="SELECT usertype FROM loginpage where userid='$id';";
+          $result=mysqli_query($conn, $sql);
+          $row1=mysqli_fetch_assoc($result);
+          if ($row1["usertype"]=='c') {
+            $utype='Casual';
+            $_SESSION["type"]=$utype;
+          }
+          else{
+            $utype='Seller';
+            $_SESSION["type"]=$utype;
+          }
+          echo"<p><img class='img-circle' src='images/user1.png'> $utype</p><br>
           <p><strong>Stats:</strong></p><br>
           <p>Polls Posted: $val</p>
           <p>Polls Voted: $value</p><br>
         </div>";?>
-        <div class="col-sm-7 text-center" >
+        <div class="col-sm-7" >
           <?php
-    $id=$_SESSION["id"];
     if (!$val) {
       echo "<div class='text-center'>
-      <h3>Hmm..you seem to be a noobie.<br> click on the pencil icon to post a question.</h3> </div>";
+      <h2>Hmm..you seem to be a noobie.<br> click on the pencil icon to post a question.</h2><br>
+      <img src='images/noob.jpg' style='opacity: 0.3'> </div>";
     }
-    $sql="SELECT * FROM userquestions WHERE userid='$id';";
+    $sql="SELECT * FROM userquestions WHERE userid='$id' ORDER BY questionid DESC;";
     $result=mysqli_query($conn, $sql);
     while ($row=mysqli_fetch_assoc($result)) {
       $question=$row["question"];
+      $qid=$row["questionid"];
+      $sql1="SELECT tag FROM userquestions WHERE questionid='$qid';";
+      $result1=mysqli_query($conn, $sql1);
+      $row1=mysqli_fetch_assoc($result1);
+      $tag=$row1["tag"];
       if($row["category"]=="s"){
-        echo "<blockquote class='social'><p><strong>$question</strong></p>
+        echo "<blockquote class='social'><p><h3>$question</h3></p>
+        <p class='tag'><span class='glyphicon glyphicon-tags'></span> Tags: $tag</p>
       <cite>in Social Issues</cite>";
+      echo"<form method='post' action='userremove.php'>
+       <button type='submit' name='submit' class='btn btn-danger' value='$qid'> Remove Question</button></form>";
       if (!($row["visibility"])) {
-          echo "<br><h4>Question Removed by Admin</h4></blockquote>";
+          echo "<br><h4 style='color: red;'>Question Removed by Admin</h4></blockquote>";
           continue;
         }
        }
       else{
-      echo "<blockquote class='gadget'><p><strong>$question</strong></p>
+      echo "<blockquote class='gadget'><p><h2>$question</h2></p>
+      <p class='tag'><span class='glyphicon glyphicon-tags'></span> Tags: $tag</p>
         <cite>in Gadgets</cite>";
+        echo"<form method='post' action='userremove.php'>
+       <button type='submit' name='submit' class='btn btn-danger' value='$qid'> Remove Question</button></form>";
         if (!($row["visibility"])) {
-         echo "<br><h4>Question Removed by Admin</h4></blockquote>";
+         echo "<br><h4 style='color: red;'>Question Removed by Admin</h4></blockquote>";
          continue;
         }
       }
@@ -160,71 +210,115 @@ h4{
         $sql1="SELECT optionid, optionvalue FROM optiontable WHERE questionid='$qid';";
         $result1=mysqli_query($conn, $sql1);
         $row1=mysqli_fetch_assoc($result1);
-        $op=$row1["optionvalue"];
-        echo" <form class='form-inline'>
-        <div class='row'>
-        <div class='col-sm-2'>
-        <input type='radio' name=ans value='1'> $op
-        </div>";
+        $op1=$row1["optionvalue"];
          $row1=mysqli_fetch_assoc($result1);
-         $op=$row1["optionvalue"];
-         echo"<div class='col-sm-2'>
-          <input type='radio' name=ans value='1'> $op
-         </div>";
+         $op2=$row1["optionvalue"];
          $row1=mysqli_fetch_assoc($result1);
-         $op=$row1["optionvalue"];
-         echo"<div class='col-sm-2'>
-          <input type='radio' name=ans value='2'> $op
-         </div>
-        </div>
-        <button class='btn btn-primary' type='submit'> submit</button>
-       </form>";
+         $op3=$row1["optionvalue"];
+           $sql4="SELECT countop1,countop2,countop3 FROM mcqresult WHERE questionid='$qid'";
+        $result4=mysqli_query($conn, $sql4);
+        $row4=mysqli_fetch_assoc($result4);
+       $res1=$row4["countop1"];
+       $res2=$row4["countop2"];
+       $res3=$row4["countop3"];
+        echo "<div class='progress'>
+  <div class='progress-bar progress-bar-success' role='progressbar' style='width:$res1%'>
+    $op1 $res1 %
+  </div>
+  <div class='progress-bar progress-bar-warning' role='progressbar' style='width:$res2%'>
+    $op2 $res2 %
+  </div>
+  <div class='progress-bar progress-bar-danger' role='progressbar' style='width:$res3%'>
+    $op3 $res3 %
+  </div>
+</div>";
+    $sql4="SELECT answerid FROM useranswer2 WHERE questionid='$qid';";
+        $result4=mysqli_query($conn, $sql4);
+        $count=mysqli_num_rows($result4);
+        if (!$count) {
           break;
-        
+        }
+        else
+         { echo"<div class='result'><h4>$count Answered</h4></div>";}
+        echo"<div class='result'><br>$op1--$res1%<br>$op2--$res2%<br>$op3--$res3%<br></p></div>";
+          break;
         case 'che':$qid=$row["questionid"];
-        $sql1="SELECT optionvalue FROM optiontable WHERE questionid='$qid';";
-        $result1=mysqli_query($conn, $sql);
+        $sql1="SELECT optionvalue,optionid FROM optiontable WHERE questionid='$qid';";
+        $result1=mysqli_query($conn, $sql1);
         $row1=mysqli_fetch_assoc($result1);
-        $op=$row1["optionvalue"];
-        echo"<div class='row'>
-        <form class='form-inline'>
-         <div class='col-sm-2'>
-          <div class='checkbox'>
-           <label><input type='checkbox' value='1'>$op</label>
-          </div>
-         </div>";
+        $op1=$row1["optionvalue"];
          $row1=mysqli_fetch_assoc($result1);
-         $op=$row1["optionvalue"];
-         echo"<div class='col-sm-2'>
-          <div class='checkbox'>
-           <label><input type='checkbox' value='2'>$op</label>
-          </div>
-         </div>";
+         $op2=$row1["optionvalue"];
          $row1=mysqli_fetch_assoc($result1);
-         $op=$row1["optionvalue"];
-         echo"<div class='col-sm-2'>
-          <div class='checkbox'>
-           <label><input type='checkbox' value='3'>$op</label>
-          </div>
-         </div>
-         <button class='btn btn-primary' type='submit'> submit</button>
-         </form>
-        </div>";
+         $op3=$row1["optionvalue"];
+        $sql4="SELECT countop1,countop2,countop3 FROM mcqresult WHERE questionid='$qid'";
+        $result4=mysqli_query($conn, $sql4);
+        $row4=mysqli_fetch_assoc($result4);
+       $res1=$row4["countop1"];
+       $res2=$row4["countop2"];
+       $res3=$row4["countop3"];
+       echo "<div class='progress'>
+  <div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='res1'
+  aria-valuemin='0' aria-valuemax='100' style='width:$res1%'>
+    $op1  $res1 %
+  </div>
+</div>
+<div class='progress'>
+  <div class='progress-bar progress-bar-warning' role='progressbar' aria-valuenow='res2'
+  aria-valuemin='0' aria-valuemax='100' style='width:$res2%'>
+    $op2  $res2 %
+  </div>
+</div>
+<div class='progress'>
+  <div class='progress-bar progress-bar-danger' role='progressbar' aria-valuenow='res3'
+  aria-valuemin='0' aria-valuemax='100' style='width:$res3%'>
+    $op3  $res3 %
+  </div>
+</div>";
+    $sql4="SELECT answerid FROM useranswer4 WHERE questionid='$qid';";
+        $result4=mysqli_query($conn, $sql4);
+        $count=mysqli_num_rows($result4);
+        if (!$count) {
+          break;
+        }
+        else
+         { echo"<div class='result'><h4>$count Answered</h4></div>";}
+       echo"<div class='result'><br>$op1--$res1%<br>$op2--$res2%<br>$op3--$res3%<br></p></div>";
           break;
         case 'txt':
-           echo"<form class='form-inline'>
-           <div class='form-group'>
-            <input type='text' class='form-control' placeholder='Post Your Answer' name='ans'>
-           </div>
-           <button class='btn btn-primary' type='submit'> submit</button>
-           </form>";
+           $qid=$row["questionid"];
+           $sql4="SELECT answer,userid,ansdate FROM useranswer1 WHERE questionid='$qid' ORDER BY ansdate DESC;";
+        $result4=mysqli_query($conn, $sql4);
+        $count=mysqli_num_rows($result4);
+        echo"<div class='result'><h4>$count Answers</h4></div>";
+        echo "<div class='result-scroll'>";
+        while($row4=mysqli_fetch_assoc($result4)){
+        $res=$row4["answer"];
+        $uid=$row4["userid"];
+        $andate=$row4["ansdate"];
+        $sql5="SELECT username FROM loginpage WHERE userid='$uid';";
+        $result5=mysqli_query($conn, $sql5);
+        $row5=mysqli_fetch_assoc($result5);
+        $un=$row5["username"];
+        echo "<div class='result'><br>$res";
+        echo"<br><cite><img class='img-circle' src='images/user1.png'>Posted by $un on $andate</cite></p></div>";
+        }echo "<div>";
            break;
-        default: echo"<form class='form-inline'>
-          <div class='form-group'>
-            <input type='number' class='form-control' placeholder='Rating' name='rat'>
-          </div>
-          <button class='btn btn-primary' type='submit'> submit</button>
-           </form>";
+        default:
+           $qid=$row["questionid"];
+               $sql4="SELECT answerid FROM useranswer3 WHERE questionid='$qid';";
+        $result4=mysqli_query($conn, $sql4);
+        $count=mysqli_num_rows($result4);
+        if (!$count) {
+          break;
+        }
+        else
+         { echo"<div class='result'><h4>$count Answered</h4></div>";}
+            $sql4="SELECT average FROM mcqresult WHERE questionid='$qid'";
+        $result4=mysqli_query($conn, $sql4);
+        $row4=mysqli_fetch_assoc($result4);
+       $res=$row4["average"];
+       echo"<div class='result'><br>average=$res/5</p></div>";
            break;
        } echo"</blockquote><hr>";
     }
